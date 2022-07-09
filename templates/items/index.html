@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>
+        Items: <br/>
+        {% if g.user and g.user['user_level'] >= 1 %}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-primary" aria-current="page" href="{{ url_for('items.create') }}">New Item</a>
+            </div>
+        {% endif %}
+    </h1>
+
+    {% for item in items %}
+        <article class="item">
+            <header>
+                <div>
+                    <h1>{{ item['name'] }}</h1>
+                    <div class="about"><b>cost:</b> {{ item['cost'] }}</div>
+                </div>
+            </header>
+            <p class="body"><b>Description: </b>{{ item['description'] }}</p>
+            {% if g.user and g.user['user_level'] >= 1 %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a class="btn btn-primary" aria-current="page" href="{{ url_for('items.update', item_id=item['id']) }}">Edit Item</a>
+                </div>
+            {% endif %}
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %}Edit "{{ item['name'] }}"{% endblock %}</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control", value=item['name']) }}
+        {{ form.cost.label(class="form-label") }}
+        {{ form.cost(class="form-control", value=item['cost']) }}
+        {{ form.description.label(class="form-label") }}
+        {% set f = form.description.process_data(item['description']) %}
+        {{ form.description(class="form-control") }}
+        <br/>
+        {{ form.submit(class="btn btn-secondary") }}
+    </form>
+    <hr>
+    <form action="{{ url_for('items.delete', item_id=item['id']) }}" method="post">
+        {{ form.delete(class="btn btn-danger") }}
+    </form>
+{% endblock %}
