@@ -4,7 +4,7 @@ from flask import (
     Blueprint, redirect, render_template, request, url_for, g, flash
 )
 
-from ..database import get_user_by_id, get_user_by_name, admin_update_user
+from ..database import get_user_by_id, get_user_by_name, admin_update_user, get_all_tickets, delete_ticket, get_all_users
 from ..forms import AdminPageForm, AdminUserForm
 
 bp = Blueprint('admin', __name__)
@@ -36,7 +36,7 @@ def admin():
 
 @bp.route('/admin/user/<int:user_id>', methods=('GET', 'POST'))
 @admin_required
-def user_page(user_id):
+def user_page(user_id: int):
     user = get_user_by_id(user_id)
     form = AdminUserForm()
     error = None
@@ -52,3 +52,18 @@ def user_page(user_id):
         flash(error)
 
     return render_template('admin/admin_user.html', user=user, form=form)
+
+
+@bp.route('/admin/tickets', methods=['GET', 'POST'])
+@admin_required
+def tickets():
+    ticket_list = get_all_tickets()
+    users = get_all_users()
+    return render_template('admin/admin_tickets.html', tickets=ticket_list, users=users)
+
+
+@bp.route('/admin/delete_ticket/<int:ticket_id>', methods=('GET', 'POST'))
+@admin_required
+def ticket_delete(ticket_id):
+    delete_ticket(ticket_id)
+    return redirect(url_for('admin.tickets'))

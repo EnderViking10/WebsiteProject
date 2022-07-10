@@ -13,7 +13,10 @@
             Administrator
         {% endif %}
         <br/>
-    <form class="form-group" method="post">
-        {{ form.password_change(class="btn btn-secondary btn-sm") }}
-    </form>
+    <div>
+        <form class="form-group" method="post">
+            {{ form.password_change(class="btn btn-secondary d-grid gap-2 mx-auto", style="float: left; margin:10px") }}
+        </form>
+        <a class="btn btn-secondary" style="float:left; margin: 10px 10px 10px 200px;" aria-current="page" href="{{ url_for('user.tickets') }}">Tickets</a>
+    </div>
 {% endblock %}

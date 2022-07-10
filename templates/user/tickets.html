@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %}New Ticket{% endblock %}</h1>
+    {% for ticket in tickets %}
+        <article class="ticket">
+            <header>
+                <div>
+                    <h1>{{ ticket['title'] }}</h1>
+                </div>
+            </header>
+            <p><b>Created on: </b>{{ ticket['created'] }}</p>
+            <p><b>Description: </b>{{ ticket['description'] }}</p>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+    <form method="post">
+        <a class="btn btn-secondary" style="float:left; margin: 10px 10px 10px 10px;" aria-current="page" href="{{ url_for('user.ticket_create') }}">Create Ticket</a>
+    </form>
+{% endblock %}

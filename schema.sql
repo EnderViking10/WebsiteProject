@@ -17,3 +17,13 @@ CREATE TABLE items
     description TEXT    NOT NULL,
     cost        INTEGER NOT NULL
 );
+
+CREATE TABLE tickets
+(
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    author_id   INTEGER   NOT NULL,
+    created     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    title       TEXT      NOT NULL,
+    description TEXT      NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES users (id)
+)

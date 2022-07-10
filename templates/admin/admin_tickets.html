@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Tickets Page</h1>
+    {% for ticket in tickets %}
+        <article class="ticket">
+            <header>
+                <div>
+                    <h1>{{ ticket['title'] }}</h1>
+                </div>
+            </header>
+            {% for user in users %}
+                <p><b>Author: </b>{% if user['id'] == ticket['author_id'] %}{{ user['username'] }}{% endif %}</p>
+            {% endfor %}
+            <p><b>Created on: </b>{{ ticket['created'] }}</p>
+            <p><b>Description: </b>{{ ticket['description'] }}</p>
+            <form class="d-grid gap-2 d-md-flex justify-content-md-end" method="post">
+                <a class="btn btn-danger" aria-current="page" href="{{ url_for('admin.ticket_delete', ticket_id=ticket['id']) }}">Delete</a>
+            </form>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

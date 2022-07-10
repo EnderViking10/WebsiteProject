@@ -31,6 +31,28 @@ def get_item(item_id: int) -> any:
     return item  # Returns the item
 
 
+"""
+TICKET FUNCTIONS
+"""
+
+
+def get_all_tickets() -> list:
+    """ Gets all the tickets in the database"""
+    db = get_db()  # Gets the database
+    tickets = db.execute(
+        'SELECT *'
+        ' FROM tickets'
+        ' ORDER BY id ASC'
+    ).fetchall()  # Gets the tickets
+
+    return tickets  # Returns the tickets
+
+
+"""
+USER FUNCTIONS
+"""
+
+
 def get_user_by_id(user_id: int) -> any:
     """ Gets a single user by user_id """
     db = get_db()  # Gets the database

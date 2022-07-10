@@ -2,12 +2,15 @@
 
 {% block content %}
     <h1>Admin Page</h1>
-    <form class="col-xl-2" method="post">
-        {{ form.hidden_tag() }}
+    <div>
+        <form class="col-xl-2" method="post">
+            {{ form.hidden_tag() }}
 
-        {{ form.username.label(class="form-label") }}
-        {{ form.username(class="form-control") }}
-        <br/>
-        {{ form.search(class="btn btn-secondary") }}
-    </form>
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control") }}
+            {{ form.search(class="btn btn-secondary d-grid gap-2 col-4 mx-auto", style="float: left; margin:10px") }}
+        </form>
+        <a class="btn btn-secondary" style="float:left; margin: 10px 10px 10px 200px;" aria-current="page" href="{{ url_for('admin.tickets') }}">Tickets</a>
+    </div>
+    <br/><br/>
 {% endblock %}
