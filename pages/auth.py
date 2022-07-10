@@ -5,8 +5,8 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from flaskr.database import get_db
-from flaskr.forms import LoginForm, RegisterForm
+from ..database import get_db, get_user_by_name, get_user_by_id, create_user, update_user
+from ..forms import LoginForm, RegisterForm, ResetPasswordForm
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -27,17 +27,22 @@ def register():
     form = RegisterForm()
     if request.method == 'POST':
         db = get_db()
+        error = None
+
+        if form.password.data != form.confirm.data:
+            error = f"Passwords do not match"
+            flash(error)
+            return redirect(url_for('auth.register', form=form))
 
         try:
-            db.execute(
-                "INSERT INTO user (username, password, user_level) VALUES (?, ?, ?)",
-                (form.username.data, generate_password_hash(form.password.data), 0)
-            )
-            db.commit()
+            create_user(form)
         except db.IntegrityError:
             error = f"User {form.username.data} is already registered."
-        else:
+
+        if error is None:
             return redirect(url_for("auth.login"))
+
+        flash(error)
 
     return render_template('auth/register.html', form=form)
 
@@ -46,11 +51,8 @@ def register():
 def login():
     form = LoginForm()
     if request.method == 'POST':
-        db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (form.username.data,)
-        ).fetchone()
+        user = get_user_by_name(form.username.data)
 
         if user is None:
             error = 'Incorrect username.'
@@ -74,15 +76,31 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = get_user_by_id(user_id)
 
 
 @bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+
+@bp.route('/reset_password', methods=['GET', 'POST'])
+@login_required
+def reset_password():
+    form = ResetPasswordForm()
+    error = None
+    if request.method == 'POST':
+        if not check_password_hash(g.user['password'], form.old_password.data):
+            error = 'Incorrect password.'
+
+        if error is None:
+            update_user(g.user['id'], generate_password_hash(form.new_password.data))
+            return redirect(url_for('user.profile'))
+
+        flash(error)
+
+    return render_template('auth/reset_password.html', form=form)
 
 
 @bp.route('/notAuthorized')
