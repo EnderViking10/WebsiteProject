@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, redirect, render_template, request, url_for
+    Blueprint, redirect, render_template, request, url_for, g
 )
 
 from .auth import login_required
