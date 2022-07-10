@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask
-from flask_bootstrap import Bootstrap
 
 
 def create_app(test_config=None):
@@ -11,7 +10,6 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite')
     )
-    Bootstrap(app)
 
     if test_config is None:
         # Load the instance config, if it exists, when not testing
@@ -42,5 +40,8 @@ def create_app(test_config=None):
 
     from .pages import admin
     app.register_blueprint(admin.bp)
+
+    from .pages import user
+    app.register_blueprint(user.bp)
 
     return app
