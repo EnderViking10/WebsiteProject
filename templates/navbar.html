@@ -9,10 +9,15 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{ url_for('items.items') }}">Items</a>
                 </li>
-                {% if g.user and g.user['user_level'] >= 1 %}
+                {% if g.user %}
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('admin.admin') }}">Admin Page</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('user.profile') }}">Profile</a>
                     </li>
+                    {% if g.user['user_level'] >=1 %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('admin.admin') }}">Admin Page</a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
             {#            <form class="d-flex me-2" role="search">#}
