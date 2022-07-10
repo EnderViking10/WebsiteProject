@@ -16,6 +16,9 @@ def admin_required(view):
         if g.user is None or g.user['user_level'] < 1:
             return redirect(url_for('auth.not_authorized'))
 
+        if g.user['restriction_level'] == 1:
+            return redirect(url_for('auth.restricted'))
+
         return view(**kwargs)
 
     return wrapped_view

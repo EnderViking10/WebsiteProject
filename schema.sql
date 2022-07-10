@@ -3,11 +3,12 @@ DROP TABLE IF EXISTS item_list;
 
 CREATE TABLE user
 (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    username    TEXT UNIQUE NOT NULL,
-    password    TEXT        NOT NULL,
-    date_joined TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_level  INTEGER     NOT NULL
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    username          TEXT UNIQUE NOT NULL,
+    password          TEXT        NOT NULL,
+    date_joined       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_level        INTEGER     NOT NULL,
+    restriction_level INTEGER     NOT NULL DEFAULT 0
 );
 
 CREATE TABLE items

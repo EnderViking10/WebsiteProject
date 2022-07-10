@@ -17,6 +17,9 @@ def login_required(view):
         if g.user is None:
             return redirect(url_for('auth.login'))
 
+        if g.user['restriction_level'] == 1:
+            return redirect(url_for('auth.restricted'))
+
         return view(**kwargs)
 
     return wrapped_view
@@ -106,3 +109,8 @@ def reset_password():
 @bp.route('/notAuthorized')
 def not_authorized():
     return render_template('auth/not_authorized.html')
+
+
+@bp.route('/restricted')
+def restricted():
+    return render_template('auth/restricted.html')
