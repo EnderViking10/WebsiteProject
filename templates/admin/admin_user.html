@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %}<b>{{ user['username'] }}</b>{% endblock %}</h1>
+    <br/>
+    <p><b>Date joined: </b>{{ user['date_joined'] }}</p>
+    <p><b>User Level: </b>
+        {% if user['user_level'] == 0 %}
+            Member
+        {% elif user['user_level'] == 1 %}
+            Moderator
+        {% elif user['user_level'] == 2 %}
+            Administrator
+        {% endif %}
+    </p>
+    <br/>
+    <h3>User Level</h3>
+    <form class="form-group" method="post">
+        {{ form.user_level(class="btn-outline-secondary") }}
+        <br/><br/>
+        {{ form.submit(class="btn-success") }}
+    </form>
+{% endblock %}

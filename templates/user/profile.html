@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %}<b>{{ g.user['username'] }}</b>{% endblock %}</h1>
+    <br/>
+    <p><b>Date joined: </b>{{ g.user['date_joined'] }}</p>
+    <p><b>User Level: </b>
+        {% if g.user['user_level'] == 0 %}
+            Member
+        {% elif g.user['user_level'] == 1 %}
+            Moderator
+        {% elif g.user['user_level'] == 2 %}
+            Administrator
+        {% endif %}
+        <br/>
+    <form class="form-group" method="post">
+        {{ form.password_change(class="btn btn-secondary btn-sm") }}
+    </form>
+{% endblock %}
