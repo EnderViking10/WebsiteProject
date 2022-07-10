@@ -5,7 +5,6 @@ Just a simple project. I don't know how to describe, or even if I have an end go
 ## Python Packages
 
 - Flask
-- Flask-Bootstrap
 - Flask-WTForms
 
 ## My Project Layout
