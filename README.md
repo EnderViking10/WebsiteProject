@@ -7,3 +7,13 @@ Just a simple project. I don't know how to describe, or even if I have an end go
 - Flask
 - Flask-Bootstrap
 - Flask-WTForms
+
+## My Project Layout
+
+    /ProjectFolder  
+    ├──flaskr
+    │  ├──...
+    ├──instance
+    │  └──flaskr.sqlite
+    └──venv
+       └──...
