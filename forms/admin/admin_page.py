@@ -3,6 +3,6 @@ from wtforms import SubmitField, SearchField
 from wtforms.validators import DataRequired
 
 
-class AdminSearchForm(FlaskForm):
+class AdminPageForm(FlaskForm):
     username = SearchField('Username', validators=[DataRequired()])
     search = SubmitField('Search')
