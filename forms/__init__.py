@@ -5,4 +5,5 @@ from .auth.register import RegisterForm
 from .auth.reset_password import ResetPasswordForm
 from .items.create__item import CreateItemForm
 from .items.update__item import UpdateItemForm
+from .tickets.create_ticket import CreateTicketForm
 from .user.user_page import UserPageForm
