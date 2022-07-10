@@ -15,7 +15,7 @@ def profile():
     form = UserPageForm()
     if request.method == 'POST':
         return redirect(url_for('auth.reset_password'))
-    
+
     return render_template('user/profile.html', form=form)
 
 

@@ -12,7 +12,7 @@ bp = Blueprint('items', __name__)
 @bp.route('/items')
 def items():
     item_list = get_all_items()
-    return render_template('items/index.html', items=item_list)
+    return render_template('items/items.html', items=item_list)
 
 
 @bp.route('/items/create', methods=('GET', 'POST'))

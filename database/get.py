@@ -2,6 +2,10 @@ from werkzeug.exceptions import abort
 
 from ._get_db import get_db
 
+"""
+ITEM FUNCTIONS
+"""
+
 
 def get_all_items() -> list:
     """ Gets all the items in the database"""
@@ -58,13 +62,10 @@ def get_user_by_id(user_id: int) -> any:
     db = get_db()  # Gets the database
     user = db.execute(
         'SELECT *'
-        ' FROM user'
+        ' FROM users'
         ' WHERE id = ?',
         (user_id,)
     ).fetchone()  # Gets the single user
-
-    if user is None:
-        abort(404, f"User {user} was not found.")
 
     return user  # Returns the user
 
@@ -74,12 +75,20 @@ def get_user_by_name(username: str) -> any:
     db = get_db()  # Gets the database
     user = db.execute(
         'SELECT *'
-        ' FROM user'
+        ' FROM users'
         ' WHERE username = ?',
         (username,)
     ).fetchone()  # Gets the single user
 
-    if user is None:
-        abort(404, f"User {user} was not found.")
-
     return user  # Returns the user
+
+
+def get_all_users() -> list:
+    """ Gets all the users in the database"""
+    db = get_db()  # Gets the database
+    users = db.execute(
+        'SELECT *'
+        ' FROM users'
+    ).fetchall()  # Gets the users
+
+    return users  # Returns the users

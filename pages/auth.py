@@ -25,6 +25,16 @@ def login_required(view):
     return wrapped_view
 
 
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_user_by_id(user_id)
+
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     form = RegisterForm()
@@ -58,9 +68,9 @@ def login():
         user = get_user_by_name(form.username.data)
 
         if user is None:
-            error = 'Incorrect username.'
+            error = 'Incorrect username'
         elif not check_password_hash(user['password'], form.password.data):
-            error = 'Incorrect password.'
+            error = 'Incorrect password'
 
         if error is None:
             session.clear()
@@ -70,16 +80,6 @@ def login():
         flash(error)
 
     return render_template('auth/login.html', form=form)
-
-
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = get_user_by_id(user_id)
 
 
 @bp.route('/logout')
