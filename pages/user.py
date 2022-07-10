@@ -3,7 +3,8 @@ from flask import (
 )
 
 from .auth import login_required
-from ..forms import UserPageForm
+from ..database import get_all_tickets, create_ticket
+from ..forms import UserPageForm, CreateTicketForm
 
 bp = Blueprint('user', __name__)
 
