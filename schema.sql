@@ -7,8 +7,9 @@ CREATE TABLE users
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
     username          TEXT UNIQUE NOT NULL,
     password          TEXT        NOT NULL,
+    backup_code       TEXT        NOT NULL,
     date_joined       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_level        INTEGER     NOT NULL,
+    user_level        INTEGER     NOT NULL DEFAULT 0,
     restriction_level INTEGER     NOT NULL DEFAULT 0
 );
 

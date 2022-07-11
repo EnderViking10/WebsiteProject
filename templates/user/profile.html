@@ -4,6 +4,7 @@
     <h1>{% block title %}<b>{{ g.user['username'] }}</b>{% endblock %}</h1>
     <br/>
     <p><b>Date joined: </b>{{ g.user['date_joined'] }}</p>
+    <p><b>Backup Code: </b>{{ g.user['backup_code'] }}</p>
     <p><b>User Level: </b>
         {% if g.user['user_level'] == 0 %}
             Member
@@ -17,6 +18,7 @@
         <form class="form-group" method="post">
             {{ form.password_change(class="btn btn-secondary d-grid gap-2 mx-auto", style="float: left; margin:10px") }}
         </form>
-        <a class="btn btn-secondary" style="float:left; margin: 10px 10px 10px 200px;" aria-current="page" href="{{ url_for('user.tickets') }}">Tickets</a>
+        <a class="btn btn-secondary" style="float:left; margin: 10px 10px 10px 100px;" aria-current="page"
+           href="{{ url_for('user.tickets') }}">Tickets</a>
     </div>
 {% endblock %}

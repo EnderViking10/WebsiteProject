@@ -1,10 +1,8 @@
-from flask import (
-    Blueprint, redirect, render_template, request, url_for, g
-)
+from flask import (Blueprint, g, redirect, render_template, request, url_for)
 
 from .auth import login_required
-from ..database import get_all_tickets, create_ticket
-from ..forms import UserPageForm, CreateTicketForm
+from ..database import create_ticket, get_all_tickets
+from ..forms import CreateTicketForm, UserPageForm
 
 bp = Blueprint('user', __name__)
 

@@ -1,12 +1,15 @@
 import functools
+import random
+import string
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 
-from ..database import get_db, get_user_by_name, get_user_by_id, create_user, update_user
+from ..database import create_user, get_db, get_user_by_id, get_user_by_name, update_user
 from ..forms import LoginForm, RegisterForm, ResetPasswordForm
+from ..forms.auth.forgot_password import ForgotPasswordForm
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -48,7 +51,9 @@ def register():
             return redirect(url_for('auth.register', form=form))
 
         try:
-            create_user(form)
+            character_list = string.ascii_letters + string.digits + string.punctuation
+            backup_code = ''.join(random.choice(character_list) for i in range(8))
+            create_user(form, backup_code)
         except db.IntegrityError:
             error = f"User {form.username.data} is already registered."
 
@@ -63,7 +68,7 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     form = LoginForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and form.log_in.data:
         error = None
         user = get_user_by_name(form.username.data)
 
@@ -78,6 +83,9 @@ def login():
             return redirect(url_for('index'))
 
         flash(error)
+
+    if request.method == 'POST' and form.forgot_password.data:
+        return redirect(url_for('auth.forgot_password'))
 
     return render_template('auth/login.html', form=form)
 
@@ -97,13 +105,41 @@ def reset_password():
         if not check_password_hash(g.user['password'], form.old_password.data):
             error = 'Incorrect password.'
 
+        if form.new_password.data != form.confirm.data:
+            error = f"Passwords do not match"
+
         if error is None:
-            update_user(g.user['id'], generate_password_hash(form.new_password.data))
+            character_list = string.ascii_letters + string.digits + string.punctuation
+            new_backup_code = ''.join(random.choice(character_list) for i in range(8))
+            update_user(g.user['id'], form.new_password.data, new_backup_code)
             return redirect(url_for('user.profile'))
 
         flash(error)
 
     return render_template('auth/reset_password.html', form=form)
+
+
+@bp.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm()
+    error = None
+    if request.method == 'POST':
+        user = get_user_by_name(form.username.data)
+        if user is None:
+            error = f'User {form.username.data} was not found'
+        elif user['backup_code'] != form.backup_code.data:
+            error = 'Incorrect backup code'
+        elif form.password.data != form.confirm.data:
+            error = f"Passwords do not match"
+        elif error is None:
+            character_list = string.ascii_letters + string.digits + string.punctuation
+            new_backup_code = ''.join(random.choice(character_list) for i in range(8))
+            update_user(user['id'], form.password.data, new_backup_code)
+            return redirect(url_for('auth.login'))
+
+        flash(error)
+
+    return render_template('auth/forgot_password.html', form=form)
 
 
 @bp.route('/notAuthorized')

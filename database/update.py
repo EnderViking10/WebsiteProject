@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash
 
 from ._get_db import get_db
-from ..forms import AdminUserForm, CreateItemForm, UpdateItemForm, RegisterForm, CreateTicketForm
+from ..forms import AdminUserForm, CreateItemForm, CreateTicketForm, RegisterForm, UpdateItemForm
 
 """
 ITEM FUNCTIONS
@@ -67,27 +67,27 @@ USER FUNCTIONS
 """
 
 
-def create_user(form: RegisterForm) -> None:
+def create_user(form: RegisterForm, backup_code: str) -> None:
     db = get_db()  # Gets the database
     # Updates the database
     db.execute(
         'INSERT INTO users'
-        ' (username, password, user_level)'
+        ' (username, password, backup_code)'
         ' VALUES (?, ?, ?)',
-        (form.username.data, generate_password_hash(form.password.data), 0)
+        (form.username.data, generate_password_hash(form.password.data), backup_code)
     )
     db.commit()  # Commits the changes
 
 
-def update_user(user_id: int, password: str) -> None:
+def update_user(user_id: int, password: str, backup_code: str) -> None:
     db = get_db()  # Gets the database
     # Updates the item in the database
     db.execute(
         'UPDATE users'
-        ' SET (password)'
-        ' = ?'
+        ' SET (password, backup_code)'
+        ' = (?, ?)'
         ' WHERE id = ?',
-        (password, user_id)
+        (generate_password_hash(password), backup_code, user_id)
     )
     db.commit()  # Commits the changes
 

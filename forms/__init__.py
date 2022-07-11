@@ -1,5 +1,6 @@
 from .admin.admin_page import AdminPageForm
 from .admin.admin_user import AdminUserForm
+from .auth.forgot_password import ForgotPasswordForm
 from .auth.login import LoginForm
 from .auth.register import RegisterForm
 from .auth.reset_password import ResetPasswordForm
