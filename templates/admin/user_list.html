@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>
+        Users: <br/>
+    </h1>
+
+    {% for user in users %}
+        <article class="users">
+            <header>
+                <div>
+                    <h4>{{ user['username'] }}</h4>
+                </div>
+                <div style="float: left"><b>User Level</b> {{ user['user_level'] }}</div>
+            </header>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-primary" aria-current="page" href="{{ url_for('admin.user_page', user_id=user['id']) }}">User Page</a>
+            </div>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

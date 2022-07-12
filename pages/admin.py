@@ -1,10 +1,8 @@
 import functools
 
-from flask import (
-    Blueprint, redirect, render_template, request, url_for, g, flash
-)
+from flask import (Blueprint, flash, g, redirect, render_template, request, url_for)
 
-from ..database import get_user_by_id, get_user_by_name, admin_update_user, get_all_tickets, delete_ticket, get_all_users
+from ..database import admin_update_user, delete_ticket, get_all_tickets, get_all_users, get_user_by_id, get_user_by_name
 from ..forms import AdminPageForm, AdminUserForm
 
 bp = Blueprint('admin', __name__)
@@ -28,13 +26,19 @@ def admin_required(view):
 @admin_required
 def admin():
     form = AdminPageForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and form.search.data:
         user = get_user_by_name(form.username.data)
         user_id = user['id']
 
         return redirect(url_for('admin.user_page', user_id=user_id))
 
     return render_template('admin/admin.html', form=form)
+
+
+@bp.route('/user_list', methods=('GET', 'POST'))
+@admin_required
+def user_list():
+    return render_template('admin/user_list.html', users=get_all_users())
 
 
 @bp.route('/admin/user/<int:user_id>', methods=('GET', 'POST'))
